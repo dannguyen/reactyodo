@@ -14,7 +14,9 @@ var app = app || {};
     this.default_thumbnail = obj.default_thumbnail;
     this.title = obj.title;
     this.t_id = obj.t_id;
-
+    this.duration = this.duration_seconds = obj.duration_seconds;
+    this.category = ['Apples', 'Fun', 'Pets', 'Travel'][(this.duration_seconds % 4)];
   };
+
 
 })();
