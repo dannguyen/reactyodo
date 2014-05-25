@@ -1,0 +1,15 @@
+
+
+.videoItem{
+  height: 280px;
+}
+
+.videoItem .thumbnail{
+  border: thin solid #999;
+  width: 100%;
+  height: 150px;
+}
+
+.videoItem .thumbnail img{
+  width: 100%;
+}
