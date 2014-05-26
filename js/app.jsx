@@ -15,12 +15,14 @@ var app = app || {};
   app.BIG_DATA_URL = "/data/videos.json";
 
   var VideoManager = app.VideoManager;
+  var VideoViewer = app.VideoViewer;
 
   var YodoApp = React.createClass({
     getInitialState: function(){
       return{
         videos: [],
-        data_url: app.DEFAULT_DATA_URL
+        data_url: app.DEFAULT_DATA_URL,
+        main_video: null
       }
     },
 
@@ -48,7 +50,6 @@ var app = app || {};
 
 
     componentDidMount: function(){
-      var setState = this.setState;
       var that = this;
 
       var router = Router({
@@ -59,7 +60,8 @@ var app = app || {};
                     that.fetchVideoData(app.BIG_DATA_URL);
                     },
         '/video/:video_id'  : function(video_id){
-                    console.log("(todo: rerender, obv!) primo video: " + video_id);
+                    that.setState({ main_video: video_id });
+                    console.log("primo video: " + that.state.main_video );
                   },
       });
 
@@ -69,9 +71,21 @@ var app = app || {};
 
 
     render: function(){
+
+
+      var videoViewer = (
+        <VideoViewer
+          data-video-id={this.state.main_video}
+          title="Some title TODO"
+        >
+
+        </VideoViewer>
+      )
+
       return(
         <div className='yodo_app'>
-          <h1>Videos</h1>
+          <h1><a href="/">Videos</a></h1>
+          {videoViewer}
           <VideoManager videos={this.state.videos} />
         </div>
       );
@@ -89,7 +103,6 @@ var app = app || {};
       document.getElementById('yodo_app_wrapper')
     );
   }
-
 
   render();
 })();

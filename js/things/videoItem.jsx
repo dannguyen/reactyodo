@@ -13,12 +13,18 @@ var app = app || {};
       return { isPlaying: false };
     },
 
+    path: function(){
+      return "/video/" + this.props.key;
+    },
+
     render: function () {
       return (
         <div className={"col-sm-" + this.props.colspan}>
           <div className="video videoItem" data-category={this.props.category} data-duration={this.props.duration}>
-            <img src="//placehold.it/250x150" />
-            <h5>{this.props.title}</h5>
+            <a href={'#' + this.path() }>
+              <img src="//placehold.it/250x150" />
+              <h5>{this.props.title}</h5>
+            </a>
           </div>
         </div>
       );
