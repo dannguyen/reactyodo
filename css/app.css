@@ -13,3 +13,22 @@
 .videoItem .thumbnail img{
   width: 100%;
 }
+
+
+.videoItem-enter {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
+
+.videoItem-enter.videoItem-enter-active {
+  opacity: 1;
+}
+
+.videoItem-leave {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
+
+.videoItem-leave.videoItem-leave-active {
+  opacity: 0.01;
+}

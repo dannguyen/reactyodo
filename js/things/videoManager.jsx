@@ -9,16 +9,19 @@ var app = app || {};
 (function(){
   'use strict';
 
+  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
   var VideoViewer = app.VideoViewer;
   var VideoItem = app.VideoItem;
   var VideoFilterBar = app.VideoFilterBar;
+  var VideoSortBar = app.VideoSortBar;
 
 
   app.VideoManager = React.createClass({
     getInitialState: function(){
       return{
         filteredCategories: {},
+        sortOps: {}
       };
     },
 
@@ -33,6 +36,9 @@ var app = app || {};
       console.log('handle filter change: ' + catbox.name + ": " + catbox.checked);
     },
 
+    handleSortChange: function(e){
+      console.log('handleSortChange');
+    },
 
     render: function () {
       var video_coll = this.props.videoCollection;
@@ -66,17 +72,34 @@ var app = app || {};
 
 
       var categories = video_coll.categoriesCount;
-      var categoriesFilterBar = (
+      var filterBar = (
         <VideoFilterBar categories={categories} onFilterChange={this.handleFilterChange} filteredCategories={this.state.filteredCategories} />
+      );
+
+      var sortBar = (
+        <VideoSortBar onChange={this.handleSortChange} sortOps={this.state.sortOps} />
       );
 
       return (
         <div className="videoManager">
-          {videoViewer}
-          {categoriesFilterBar}
+          <section>
+            {videoViewer}
+          </section>
+
+
+          <section>
+            <form role="form">
+              {sortBar}
+              {filterBar}
+            </form>
+          </section>
+
+
           <section className="videos">
             <div className="row">
+              <ReactCSSTransitionGroup transitionName="videoItem">
               {videoItems}
+              </ReactCSSTransitionGroup>
             </div>
           </section>
         </div>
