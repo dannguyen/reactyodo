@@ -15,14 +15,14 @@ var app = app || {};
   app.BIG_DATA_URL = "/data/videos.json";
 
   var VideoManager = app.VideoManager;
-  var VideoViewer = app.VideoViewer;
+  var VideoCollection = app.VideoCollection;
 
   var YodoApp = React.createClass({
     getInitialState: function(){
       return{
-        videos: [],
+        videoCollection: new VideoCollection(),
         data_url: app.DEFAULT_DATA_URL,
-        main_video: null
+        activeVideoId: undefined
       }
     },
 
@@ -31,21 +31,25 @@ var app = app || {};
 
       $.get(d_url, function(results){
         console.log("results fetched: " + results.length);
-        var vids = this.processVideoData(results);
+        var coll = this.processVideoData(results);
 
-        this.setState({videos: vids });
+        this.setState({videoCollection: coll });
 
       }.bind(this));
     },
 
     processVideoData: function(results){
-      var x = results.map( function(obj){
-          return new app.VideoModel(obj);
-        }, this );
+      var hsh = _.reduce( results, function(h, res){
+        var vid = new app.VideoModel(res);
+        h[vid.t_id] = vid;
 
-      console.log("videos processed: " + x.length);
+        return h;
+      }, {});
 
-      return x;
+      var coll = new VideoCollection(hsh);
+
+      console.log("videos processed: " + coll.videoCount());
+      return coll;
     },
 
 
@@ -55,13 +59,14 @@ var app = app || {};
       var router = Router({
         '/'       : function() {
                       that.fetchVideoData(app.DEFAULT_DATA_URL);
+                      that.setState({ activeVideoId: undefined });
                     },
         '/big'    : function() {
-                    that.fetchVideoData(app.BIG_DATA_URL);
+                      that.fetchVideoData(app.BIG_DATA_URL);
+                      that.setState({ activeVideoId: undefined });
                     },
         '/video/:video_id'  : function(video_id){
-                    that.setState({ main_video: video_id });
-                    console.log("primo video: " + that.state.main_video );
+                    that.setState({ activeVideoId: video_id });
                   },
       });
 
@@ -72,21 +77,10 @@ var app = app || {};
 
     render: function(){
 
-
-      var videoViewer = (
-        <VideoViewer
-          data-video-id={this.state.main_video}
-          title="Some title TODO"
-        >
-
-        </VideoViewer>
-      )
-
       return(
         <div className='yodo_app'>
-          <h1><a href="/">Videos</a></h1>
-          {videoViewer}
-          <VideoManager videos={this.state.videos} />
+          <h1><a href="/">YodoApp</a></h1>
+          <VideoManager videoCollection={this.state.videoCollection} activeVideoId={this.state.activeVideoId} />
         </div>
       );
     }

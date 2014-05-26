@@ -1,8 +1,7 @@
 {
-  "name": "todomvc-react",
+  "name": "yodoapp-react",
   "version": "0.0.0",
   "dependencies": {
-    "todomvc-common": "~0.1.7",
     "director": "~1.2.0",
     "react": "~0.10.0",
     "jquery": "~1.9.0",

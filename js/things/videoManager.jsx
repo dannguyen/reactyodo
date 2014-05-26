@@ -10,13 +10,13 @@ var app = app || {};
   'use strict';
 
 
+  var VideoViewer = app.VideoViewer;
   var VideoItem = app.VideoItem;
   var CategoryItem = app.CategoryItem;
 
   var FilterBar = React.createClass({
       render: function() {
         var categoryMenu = _.collect(this.props.categories, function(catcount, catname){
-          console.log(catname)
           return(
             <CategoryItem
               key={catname}
@@ -54,8 +54,18 @@ var app = app || {};
     },
 
     render: function () {
-      var videos = this.props.videos;
-      var categories = this.extractCategories(videos);
+
+      var video_coll = this.props.videoCollection;
+      var video = video_coll.findVideoById(this.props.activeVideoId);
+      // is a video active? set the main VideoViewer
+        var videoViewer = (
+          <VideoViewer
+            video={video}
+          >
+          </VideoViewer>
+        );
+
+      var videos = this.props.videoCollection.getVideos();
       var videoItems = videos.map(function(video) {
         return(
           <VideoItem
@@ -70,9 +80,15 @@ var app = app || {};
         );
       }, this);
 
+
+      var categories = this.extractCategories(videos);
+      var categoriesFilter = (<FilterBar categories={categories} />);
+
+
       return (
         <div className="videoManager">
-          <FilterBar categories={categories} />
+          {videoViewer}
+          {categoriesFilter}
           <section className="videos">
             <div className="row">
               {videoItems}

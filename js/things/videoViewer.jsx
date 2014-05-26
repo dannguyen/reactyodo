@@ -14,18 +14,22 @@ var app = app || {};
     },
 
     render: function () {
-      var is_on_display = _.isNull(this.props['data-video-id']) ? 'none' : 'block';
+      var video = this.props.video;
+      if(video){
+        return (
+          <div className="videoViewer">
+              <div className="videoPlayback">
+                <img src="//placehold.it/950x550" />
+              </div>
+              <div className="videoInfo">
+                <h5>{video.title} {video.t_id}</h5>
+              </div>
+          </div>
+        );
+      }else{
+        return( <div className="videoViewer">TODO: What happens when video is deep-linked and no collection is loaded?</div>);
+      }
 
-      return (
-        <div className="videoViewer" style={{display: is_on_display}}>
-            <div className="videoPlayback">
-              <img src="//placehold.it/950x550" />
-            </div>
-            <div className="videoInfo">
-              <h5>{this.props.title}</h5>
-            </div>
-        </div>
-      );
     }
   });
 

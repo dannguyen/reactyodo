@@ -18,5 +18,25 @@ var app = app || {};
     this.category = ['Apples', 'Fun', 'Pets', 'Travel'][(this.duration_seconds % 4)];
   };
 
+  // arr is a collection of videos
+  app.VideoCollection = function(obj){
+    this.videoHash = obj || {};
+
+
+    this.videoCount = function(){
+      return this.getVideos().length;
+    }
+    this.getVideos = function(){
+      return _.values(this.videoHash);
+    };
+
+    this.findVideoById = function(uid){
+      if(uid === undefined || uid === null || _.isEmpty(this.videoHash)){
+        return undefined;
+      }else{
+        return this.videoHash[uid];
+      }
+    };
+  }
 
 })();
