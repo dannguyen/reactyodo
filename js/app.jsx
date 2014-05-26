@@ -31,26 +31,14 @@ var app = app || {};
 
       $.get(d_url, function(results){
         console.log("results fetched: " + results.length);
-        var coll = this.processVideoData(results);
+        var coll = new VideoCollection(results);
 
         this.setState({videoCollection: coll });
 
       }.bind(this));
     },
 
-    processVideoData: function(results){
-      var hsh = _.reduce( results, function(h, res){
-        var vid = new app.VideoModel(res);
-        h[vid.t_id] = vid;
 
-        return h;
-      }, {});
-
-      var coll = new VideoCollection(hsh);
-
-      console.log("videos processed: " + coll.videoCount());
-      return coll;
-    },
 
 
     componentDidMount: function(){

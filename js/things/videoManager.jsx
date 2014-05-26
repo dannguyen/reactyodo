@@ -42,16 +42,7 @@ var app = app || {};
 
   app.VideoManager = React.createClass({
 
-    // returns a group-counted array
-    extractCategories: function(videos){
-      return _.reduce(videos, function(hsh, video){
-        var cat = video.category;
-        if( _.isUndefined(hsh[cat])){ hsh[cat] = 0; }
-        hsh[cat] += 1;
 
-        return hsh
-      }, {});
-    },
 
     render: function () {
 
@@ -65,7 +56,7 @@ var app = app || {};
           </VideoViewer>
         );
 
-      var videos = this.props.videoCollection.getVideos();
+      var videos = video_coll.getVideos();
       var videoItems = videos.map(function(video) {
         return(
           <VideoItem
@@ -81,14 +72,14 @@ var app = app || {};
       }, this);
 
 
-      var categories = this.extractCategories(videos);
-      var categoriesFilter = (<FilterBar categories={categories} />);
+      var categories = video_coll.categoriesCount;
+      var categoriesFilterBar = (<FilterBar categories={categories} />);
 
 
       return (
         <div className="videoManager">
           {videoViewer}
-          {categoriesFilter}
+          {categoriesFilterBar}
           <section className="videos">
             <div className="row">
               {videoItems}
