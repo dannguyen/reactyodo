@@ -12,94 +12,67 @@ var app = app || {};
   'use strict';
 
   app.DEFAULT_DATA_URL = "/data/videos-small.json";
+  app.BIG_DATA_URL = "/data/videos.json";
 
-  var CategoryItem = app.CategoryItem;
-  var VideoItem = app.VideoItem;
-
+  var VideoManager = app.VideoManager;
 
   var YodoApp = React.createClass({
     getInitialState: function(){
       return{
         videos: [],
-        categories: ['None']
+        data_url: app.DEFAULT_DATA_URL
       }
     },
 
-    getData: function(){
-      var data_url = app.DEFAULT_DATA_URL;
-      $.get(data_url, function(results){
-        this.processVideoData(results);
+    fetchVideoData: function(d_url){
+      console.log("fetching url: " + d_url);
+
+      $.get(d_url, function(results){
+        console.log("results fetched: " + results.length);
+        var vids = this.processVideoData(results);
+
+        this.setState({videos: vids });
 
       }.bind(this));
     },
 
     processVideoData: function(results){
-      this.setState({
-        videos: results.map( function(obj){
+      var x = results.map( function(obj){
           return new app.VideoModel(obj);
-        }, this)
-      });
+        }, this );
 
-      console.log("videos loaded: " + this.state.videos.length);
+      console.log("videos processed: " + x.length);
 
-      this.setState({
-        categories: this.getCategories(this.state.videos)
-      });
-    },
-
-
-    // returns a group-counted array
-    getCategories: function(videos){
-      return _.reduce(videos, function(hsh, video){
-        var cat = video.category;
-        if( _.isUndefined(hsh[cat])){ hsh[cat] = 0; }
-        hsh[cat] += 1;
-
-        return hsh
-      }, {});
+      return x;
     },
 
 
     componentDidMount: function(){
       var setState = this.setState;
+      var that = this;
+
       var router = Router({
-        '/': setState.bind(this, { })
-        // '/active': setState.bind(this, {nowShowing: app.things})
+        '/'       : function() {
+                      that.fetchVideoData(app.DEFAULT_DATA_URL);
+                    },
+        '/big'    : function() {
+                    that.fetchVideoData(app.BIG_DATA_URL);
+                    },
+        '/video/:video_id'  : function(video_id){
+                    console.log("(todo: rerender, obv!) primo video: " + video_id);
+                  },
       });
+
       router.init('/');
 
-      this.getData();
     },
 
 
     render: function(){
-
-
-      var videos = this.state.videos;
-      var videoItems = videos.map(function(video) {
-        return(
-          <VideoItem
-            key={video.t_id}
-            colspan="3"
-            thumbnail={video.default_thumbnail}
-            title={video.title}
-            category={video.category}
-            duration={video.duration}
-          >
-          </VideoItem>
-        );
-      }, this);
-
       return(
         <div className='yodo_app'>
           <h1>Videos</h1>
-          <FilterBar categories={this.state.categories} />
-
-          <section className="videos">
-            <div className="row">
-              {videoItems}
-            </div>
-          </section>
+          <VideoManager videos={this.state.videos} />
         </div>
       );
     }
@@ -108,37 +81,6 @@ var app = app || {};
 
 
   }); // YodoApp
-
-
-
-
-
-
-  var FilterBar = React.createClass({
-      render: function() {
-        var categoryMenu = _.collect(this.props.categories, function(catcount, catname){
-          console.log(catname)
-          return(
-            <CategoryItem
-              key={catname}
-              name={catname}
-              value={catname}
-              itemCount={catcount}
-            >
-            </CategoryItem>
-          );
-        });
-
-
-          return (
-              <form>
-                <ul className="categoryMenu list-inline">Hello {categoryMenu}</ul>
-              </form>
-          );
-      }
-  });
-
-
 
 
   function render(){
