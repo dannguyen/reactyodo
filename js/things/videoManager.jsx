@@ -12,41 +12,32 @@ var app = app || {};
 
   var VideoViewer = app.VideoViewer;
   var VideoItem = app.VideoItem;
-  var CategoryItem = app.CategoryItem;
-
-  var FilterBar = React.createClass({
-      render: function() {
-        var categoryMenu = _.collect(this.props.categories, function(catcount, catname){
-          return(
-            <CategoryItem
-              key={catname}
-              name={catname}
-              value={catname}
-              itemCount={catcount}
-            >
-            </CategoryItem>
-          );
-        });
-
-
-          return (
-              <form>
-                <ul className="categoryMenu list-inline">Hello {categoryMenu}</ul>
-              </form>
-          );
-      }
-  });
-
-
+  var VideoFilterBar = app.VideoFilterBar;
 
 
   app.VideoManager = React.createClass({
+    getInitialState: function(){
+      return{
+        filteredCategories: {},
+      };
+    },
 
+    // sets the state of Filters
+    // returns nothing
+    handleFilterChange: function(e){
+      var catbox = e.target;
+      var fCats = this.state.filteredCategories;
+      fCats[catbox.name] = catbox.checked;
+
+      this.setState({filteredCategories: fCats});
+      console.log('handle filter change: ' + catbox.name + ": " + catbox.checked);
+    },
 
 
     render: function () {
-
       var video_coll = this.props.videoCollection;
+      app.VC = video_coll; // TK debugging
+      // set video if we're viewing a video
       var video = video_coll.findVideoById(this.props.activeVideoId);
       // is a video active? set the main VideoViewer
         var videoViewer = (
@@ -56,7 +47,9 @@ var app = app || {};
           </VideoViewer>
         );
 
-      var videos = video_coll.getVideos();
+      // filter and get videos
+
+      var videos = video_coll.getVideos( { category: this.state.filteredCategories } );
       var videoItems = videos.map(function(video) {
         return(
           <VideoItem
@@ -73,8 +66,9 @@ var app = app || {};
 
 
       var categories = video_coll.categoriesCount;
-      var categoriesFilterBar = (<FilterBar categories={categories} />);
-
+      var categoriesFilterBar = (
+        <VideoFilterBar categories={categories} onFilterChange={this.handleFilterChange} filteredCategories={this.state.filteredCategories} />
+      );
 
       return (
         <div className="videoManager">

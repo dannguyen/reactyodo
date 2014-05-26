@@ -20,7 +20,7 @@ var app = app || {};
             {this.props.name} ({this.props.itemCount})
             &nbsp;
           </label>
-          <input className="category" type="checkbox"></input>
+          <input className="category" type="checkbox" name={this.props.name} onChange={this.props.onChange} checked={this.props.isActive}></input>
         </li>
       );
     }

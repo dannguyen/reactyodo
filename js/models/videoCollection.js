@@ -22,7 +22,7 @@ var app = app || {};
     this.categoriesCount = this.extractCategories(video_array_temp);
 
     // set up filters
-    var categories_filter = PourOver.makeExactFilter("category", _.values(this.categoriesCount));
+    var categories_filter = PourOver.makeExactFilter("category", _.keys(this.categoriesCount));
     this.pouroverCollection.addFilters([categories_filter]);
   };
 
@@ -30,15 +30,35 @@ var app = app || {};
     return this.getVideos().length;
   };
 
+  // filter_opts is a Hash thgat looks like {categories: ['Airlines', 'Hotels'], dates: [tkETC, 2012] }
   VideoCollection.prototype.getVideos = function(filter_opts){
-    var cfilter;
-    if(_.isUndefined(filter_opts)){
-      cfilter = this.pouroverCollection.getAllItems();
+    var items = [], coll = this.pouroverCollection;
+    var pView = new PourOver.View("default_view", coll);
+
+    if( _.isUndefined(filter_opts)      === true ||      // filteropts is undefined
+        _.isEmpty(filter_opts)          === true ||      // filteropts is empty
+        _.every(_.values(filter_opts), function(a){ return _.isEmpty(a); })  === true         // every array of filteropts is empty
+      ){
+      // return all of the items
+      // i.e. leave pView and coll alone
     }else{
-      cfilter = this.pouroverCollection.getAllItems();
+      // return some items
+      // modify coll with stateful query filters
+
+      _.each(filter_opts, function(filtersHash, filterType){
+        var active_filters = [];
+        _.each(filtersHash, function(is_filtered, fName){
+          if( is_filtered === true ) { active_filters.push(fName); }
+        })
+        // now filter
+        coll.filters[filterType].query( active_filters );
+      })
     }
 
-    return this.pouroverCollection.get(cfilter.cids);
+    items = pView.getCurrentItems();
+    console.log("pourover items: " + items.length );
+
+    return items;
   };
 
   VideoCollection.prototype.findVideoById = function(uid){
