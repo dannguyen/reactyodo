@@ -13,19 +13,26 @@ var app = app || {};
       render: function() {
         var handleFilterChange = this.props.onFilterChange;
         var selectedCat = this.props.categoryType;
+        console.log("selectedCat is: " + selectedCat);
         var categoryOpts = _.collect(this.props.categories, function(catcount, catname){
 //          var isChecked = filteredCats[catname] === true;
 
           return(
             <FilterCategoryItem
-              key={"catfilter" + catname}
+              key={"catfilter-" + catname}
               name={catname}
             />
           );
         });
 
+
         return(<div class="form-group">
           <select name="category" defaultValue={selectedCat} onChange={this.props.onFilterChange}>
+            <FilterCategoryItem
+              key={"catfilter-blank"}
+              name=""
+            />
+
             {categoryOpts}
           </select>
         </div>);

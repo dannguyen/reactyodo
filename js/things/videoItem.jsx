@@ -14,28 +14,31 @@ var app = app || {};
     },
 
     path: function(){
-      return "/video/" + this.props.key;
+      return "/video/" + this.props.video.t_id;
     },
 
     render: function () {
+      var video = this.props.video;
+
       return (
         <div className={"col-sm-" + this.props.colspan}>
-          <div className="video videoItem" data-category={this.props.category} data-duration={this.props.duration}>
+          <div className="video videoItem" data-category={video.category} data-duration={video.duration}>
             <a href={'#' + this.path() }>
-              <img src="//placehold.it/250x150" />
-              <h5>{this.props.title}</h5>
+              <div className="imgwrap"><img src={video.default_thumbnail} /></div>
+              <h5 style={{display: "none"}}>{video.title}</h5>
 
             </a>
-            <div class="meta">
-              <span className="view_count"> {numeral(this.props.view_count).format('0,0')} views</span>
-              &nbsp;
-              <span className="published_at">{ moment(this.props.pub_seconds + "", "X").format('l') }</span>
-            </div>
-            <div className="approvail">
-              {numeral(this.props.likes).format('0,0')} likes &nbsp; {numeral(this.props.dislikes).format('0,0')} dislikes
+            <div class="meta" style={{display: "none"}}>
+              <div class="metrics">
+                <span className="view_count"> {numeral(video.view_count).format('0,0')} views</span>
+                &nbsp;
+                <span className="published_at">{ moment(video.pub_seconds + "", "X").format('l') }</span>
+              </div>
+              <div className="approval">
+                {numeral(video.likes).format('0,0')} likes &nbsp; {numeral(video.dislikes).format('0,0')} dislikes
 
+              </div>
             </div>
-
           </div>
         </div>
       );

@@ -16,7 +16,7 @@ var app = app || {};
     render: function () {
       return(
         <option value={this.props.name}>
-            {this.props.name}
+            {this.props.name === '' ? 'All' : this.props.name}
         </option>
 
       );

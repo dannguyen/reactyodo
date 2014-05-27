@@ -22,7 +22,8 @@ var app = app || {};
       return{
         videoCollection: new VideoCollection(),
         data_url: app.DEFAULT_DATA_URL,
-        activeVideoId: undefined
+        activeVideoId: undefined,
+        activeCategory: ''
       }
     },
 
@@ -51,6 +52,9 @@ var app = app || {};
         '/video/:video_id'  : function(video_id){
                     that.setState({ activeVideoId: video_id });
                   },
+        '/category/:category'  : function(category){
+                    that.setState({ activeCategory: category}); // isn't working
+                  }
       });
 
       router.init('/');
@@ -63,7 +67,9 @@ var app = app || {};
       return(
         <div className='yodo_app'>
           <h1><a href="/">YodoApp</a></h1>
-          <VideoManager videoCollection={this.state.videoCollection} activeVideoId={this.state.activeVideoId} />
+          <VideoManager videoCollection={this.state.videoCollection}
+              activeCategory={this.state.activeCategory}
+              activeVideoId={this.state.activeVideoId} />
         </div>
       );
     }

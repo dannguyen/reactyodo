@@ -14,7 +14,7 @@ var app = app || {};
     this.default_thumbnail = obj.default_thumbnail;
     this.title = obj.title;
     this.t_id = obj.t_id;
-    this.category = obj.sector_name;
+    this.category = this.sector_name = obj.sector_name;
     this.duration = this.duration_seconds = obj.duration_seconds;
     this.view_count = obj.view_count;
     this.published_at = obj.published_at;
@@ -22,6 +22,9 @@ var app = app || {};
     this.pub_year = obj.pub_year;
     this.likes = obj.likes;
     this.dislikes = obj.dislikes;
+
+    this.brand_name = obj.brand_name
+    this.brand_slug = obj.brand_slug
 
   };
 

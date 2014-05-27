@@ -1,3 +1,15 @@
+.imgwrap img{
+  width: 100%;
+}
+
+.imgwrap{
+  overflow: hidden;
+}
+
+.row.no-gutter [class*="col"]{
+  padding-left: 0;
+  padding-right: 0;
+}
 
 .fancy-checkbox{
   background: #258294;
@@ -11,7 +23,8 @@
 }
 
 .videoItem{
-  height: 280px;
+  height: 300px;
+  background: black;
 }
 
 .videoItem .thumbnail{
@@ -46,10 +59,10 @@
 
 /* video viewer */
 
-.videoViewer{
+.videoPlayer{
   margin-bottom: 2.0em;
 }
 
-.videoViewer.empty{
+.videoPlayer.empty{
   display: none;
 }

@@ -77,18 +77,11 @@ var app = app || {};
       pView = this.sortVideosView(pView, opts.sortType)
     }
    this.currentView = pView;
+
    return this.currentView;
-  }
+  };
 
 
-  VideoCollection.prototype.getVideos = function(opts){
-    var pView = this.getView(opts);
-
-    var items = pView.getCurrentItems();
-    console.log("pourover items: " + items.length );
-
-    return items;
-  }
 
   // filter_opts is a Hash thgat looks like {categories: ['Airlines', 'Hotels'], dates: [tkETC, 2012] }
   VideoCollection.prototype.filterVideosView = function(pView, filter_opts){
@@ -99,15 +92,19 @@ var app = app || {};
         _.every(_.values(filter_opts), function(a){ return _.isEmpty(a); })  === true         // every array of filteropts is empty
       ){
       // return all of the items
+    console.log('ALL pourover')
       // i.e. leave pView and coll alone
     }else{
       // return some items
       // modify coll with stateful query filters
+    console.log('filtered pourover')
 
       _.each(filter_opts, function(filtersHash, filterType){
         var active_filters = [];
-        _.each(filtersHash, function(is_filtered, fName){
-          if( is_filtered === true ) { active_filters.push(fName); }
+        _.each(filtersHash, function(fName){
+          if(fName && fName !== ''){ // a blank value indicates "all"
+            active_filters.push(fName);
+          }
         })
         // now filter
         coll.filters[filterType].query( active_filters );
