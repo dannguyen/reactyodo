@@ -21,7 +21,7 @@ var app = app || {};
     getInitialState: function(){
       return{
         filteredCategories: {},
-        sortOps: {}
+        sortType: 'Most Viewed'
       };
     },
 
@@ -37,7 +37,8 @@ var app = app || {};
     },
 
     handleSortChange: function(e){
-      console.log('handleSortChange');
+      var catbox = e.target;
+      this.setState({sortType: catbox.value});
     },
 
     render: function () {
@@ -55,11 +56,17 @@ var app = app || {};
 
       // filter and get videos
 
-      var videos = video_coll.getVideos( { category: this.state.filteredCategories } );
+      var videos = video_coll.getVideos( { filters: { category: this.state.filteredCategories },
+                                           sortType: this.state.sortType
+                                          }
+                                        );
+
       var videoItems = videos.map(function(video) {
         return(
           <VideoItem
             key={video.t_id}
+            view_count={video.view_count}
+            published_at={video.published_at}
             colspan="3"
             thumbnail={video.default_thumbnail}
             title={video.title}
@@ -77,7 +84,7 @@ var app = app || {};
       );
 
       var sortBar = (
-        <VideoSortBar onChange={this.handleSortChange} sortOps={this.state.sortOps} />
+        <VideoSortBar onChange={this.handleSortChange} sortType={this.state.sortType} />
       );
 
       return (
@@ -97,9 +104,7 @@ var app = app || {};
 
           <section className="videos">
             <div className="row">
-              <ReactCSSTransitionGroup transitionName="videoItem">
               {videoItems}
-              </ReactCSSTransitionGroup>
             </div>
           </section>
         </div>
@@ -108,3 +113,7 @@ var app = app || {};
   });
 
 })();
+
+ // <ReactCSSTransitionGroup transitionName="videoItem">
+ //              {videoItems}
+ //              </ReactCSSTransitionGroup>

@@ -16,6 +16,8 @@ var app = app || {};
     this.t_id = obj.t_id;
     this.duration = this.duration_seconds = obj.duration_seconds;
     this.category = ['Apples', 'Fun', 'Pets', 'Travel'][(this.duration_seconds % 4)];
+    this.view_count = obj.view_count;
+    this.published_at = obj.published_at;
   };
 
 })();

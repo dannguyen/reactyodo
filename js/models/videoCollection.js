@@ -13,6 +13,36 @@ var app = app || {};
 
   var VideoModel = app.VideoModel;
 
+  var NewestVideoSort = PourOver.Sort.extend({
+    fn: function(x,y){
+      var a = x.published_at, b = y.published_at;
+        if (b < a){
+          return -1;
+        } else if (b > a){
+          return 1;
+        } else {
+          return 0;
+        }
+    }
+  });
+
+  var MostViewedVideoSort = PourOver.Sort.extend({
+    attr: "view_count",
+    fn: function(x,y){
+      var a = x.view_count, b = y.view_count;
+
+        if (b < a){
+          return -1;
+        } else if (b > a){
+          return 1;
+        } else {
+          return 0;
+        }
+    }
+  });
+
+
+
   // arr is a collection of videos
   var VideoCollection = app.VideoCollection = function(arr){
     this.videoHash = this.processVideoData(arr || []);
@@ -24,16 +54,33 @@ var app = app || {};
     // set up filters
     var categories_filter = PourOver.makeExactFilter("category", _.keys(this.categoriesCount));
     this.pouroverCollection.addFilters([categories_filter]);
+
+
+    // set up sorts
+    var ax = new MostViewedVideoSort("Most Viewed") , ay = new NewestVideoSort("Newest");
+    this.pouroverCollection.addSorts([ax, ay]);
+
   };
 
-  VideoCollection.prototype.videoCount =  function(){
-    return this.getVideos().length;
-  };
+
+  VideoCollection.prototype.getVideos = function(opts){
+    var pView = new PourOver.View("default_view", this.pouroverCollection);
+    if(_.isUndefined(opts)){
+      pView = this.filterVideosView(pView, {})
+    }else{
+      pView = this.filterVideosView(pView, opts.filters)
+      pView = this.sortVideosView(pView, opts.sortType)
+    }
+
+    var items = pView.getCurrentItems();
+    console.log("pourover items: " + items.length );
+
+    return items;
+  }
 
   // filter_opts is a Hash thgat looks like {categories: ['Airlines', 'Hotels'], dates: [tkETC, 2012] }
-  VideoCollection.prototype.getVideos = function(filter_opts){
-    var items = [], coll = this.pouroverCollection;
-    var pView = new PourOver.View("default_view", coll);
+  VideoCollection.prototype.filterVideosView = function(pView, filter_opts){
+    var coll = pView.collection;
 
     if( _.isUndefined(filter_opts)      === true ||      // filteropts is undefined
         _.isEmpty(filter_opts)          === true ||      // filteropts is empty
@@ -55,11 +102,16 @@ var app = app || {};
       })
     }
 
-    items = pView.getCurrentItems();
-    console.log("pourover items: " + items.length );
-
-    return items;
+    return pView;
   };
+
+
+  VideoCollection.prototype.sortVideosView = function(pView, sort_type){
+    console.log("sort_type is: " + sort_type);
+    pView.setSort(sort_type);
+
+    return pView;
+  }
 
   VideoCollection.prototype.findVideoById = function(uid){
     if(uid === undefined || uid === null || _.isEmpty(this.videoHash)){
@@ -69,6 +121,9 @@ var app = app || {};
     }
   };
 
+  VideoCollection.prototype.videoCount =  function(){
+    return this.getVideos().length;
+  };
 
 
 
