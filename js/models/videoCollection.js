@@ -48,7 +48,10 @@ var app = app || {};
     this.videoHash = this.processVideoData(arr || []);
 
     var video_array_temp = _.values(this.videoHash);
+
+    this.resultsLength = video_array_temp.length; // a temp workaround
     this.pouroverCollection = new PourOver.Collection( video_array_temp );
+    this.currentView = undefined;
     this.categoriesCount = this.extractCategories(video_array_temp);
 
     // set up filters
@@ -63,14 +66,23 @@ var app = app || {};
   };
 
 
-  VideoCollection.prototype.getVideos = function(opts){
-    var pView = new PourOver.View("default_view", this.pouroverCollection);
+
+
+  VideoCollection.prototype.getView = function(opts){
+    var pView = new PourOver.View("default_view", this.pouroverCollection, { page_size: 100 });
     if(_.isUndefined(opts)){
       pView = this.filterVideosView(pView, {})
     }else{
       pView = this.filterVideosView(pView, opts.filters)
       pView = this.sortVideosView(pView, opts.sortType)
     }
+   this.currentView = pView;
+   return this.currentView;
+  }
+
+
+  VideoCollection.prototype.getVideos = function(opts){
+    var pView = this.getView(opts);
 
     var items = pView.getCurrentItems();
     console.log("pourover items: " + items.length );
@@ -121,8 +133,18 @@ var app = app || {};
     }
   };
 
-  VideoCollection.prototype.videoCount =  function(){
-    return this.getVideos().length;
+
+  VideoCollection.prototype.selectedVideoCount =  function(){
+    if(_.isUndefined(this.currentView)){
+      return 0;
+    }else{
+      return this.currentView.getCurrentItems().length;
+    }
+
+  };
+
+  VideoCollection.prototype.totalVideoCount =  function(){
+    return this.resultsLength; // TK fix later
   };
 
 

@@ -11,7 +11,7 @@ var app = app || {};
 (function(){
   'use strict';
 
-  app.DEFAULT_DATA_URL = "/data/videos-small.json";
+  app.DEFAULT_DATA_URL = "/data/videos-small.json"; // = "/data/videos-small.json";
   app.BIG_DATA_URL = "/data/videos.json";
 
   var VideoManager = app.VideoManager;
@@ -46,11 +46,6 @@ var app = app || {};
 
       var router = Router({
         '/'       : function() {
-                      that.fetchVideoData(app.DEFAULT_DATA_URL);
-                      that.setState({ activeVideoId: undefined });
-                    },
-        '/big'    : function() {
-                      that.fetchVideoData(app.BIG_DATA_URL);
                       that.setState({ activeVideoId: undefined });
                     },
         '/video/:video_id'  : function(video_id){
@@ -59,7 +54,7 @@ var app = app || {};
       });
 
       router.init('/');
-
+      that.fetchVideoData(app.DEFAULT_DATA_URL);
     },
 
 

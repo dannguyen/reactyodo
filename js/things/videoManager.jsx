@@ -20,7 +20,7 @@ var app = app || {};
   app.VideoManager = React.createClass({
     getInitialState: function(){
       return{
-        filteredCategories: {},
+        categoryType: '',
         sortType: 'Most Viewed'
       };
     },
@@ -29,11 +29,13 @@ var app = app || {};
     // returns nothing
     handleFilterChange: function(e){
       var catbox = e.target;
-      var fCats = this.state.filteredCategories;
-      fCats[catbox.name] = catbox.checked;
+      // var fCats = this.state.filteredCategories;
+      // fCats[catbox.name] = catbox.checked;
 
-      this.setState({filteredCategories: fCats});
-      console.log('handle filter change: ' + catbox.name + ": " + catbox.checked);
+      console.log('handle filter change: ' + catbox.name + ": " + catbox.value);
+      console.log(catbox);
+
+      // this.setState({categoryType: fCat });
     },
 
     handleSortChange: function(e){
@@ -56,7 +58,7 @@ var app = app || {};
 
       // filter and get videos
 
-      var videos = video_coll.getVideos( { filters: { category: this.state.filteredCategories },
+      var videos = video_coll.getVideos( { filters: { category:  this.state.categoryType },
                                            sortType: this.state.sortType
                                           }
                                         );
@@ -67,11 +69,14 @@ var app = app || {};
             key={video.t_id}
             view_count={video.view_count}
             published_at={video.published_at}
+            pub_seconds={video.pub_seconds}
             colspan="3"
             thumbnail={video.default_thumbnail}
             title={video.title}
             category={video.category}
             duration={video.duration}
+            likes={video.likes}
+            dislikes={video.dislikes}
           >
           </VideoItem>
         );
@@ -80,7 +85,7 @@ var app = app || {};
 
       var categories = video_coll.categoriesCount;
       var filterBar = (
-        <VideoFilterBar categories={categories} onFilterChange={this.handleFilterChange} filteredCategories={this.state.filteredCategories} />
+        <VideoFilterBar categories={categories} onFilterChange={this.handleFilterChange} categoryType={this.state.categoryType} />
       );
 
       var sortBar = (
@@ -95,6 +100,9 @@ var app = app || {};
 
 
           <section>
+            <div className="summary">
+                {video_coll.totalVideoCount()} videos, {video_coll.selectedVideoCount()} videos visible
+            </div>
             <form role="form">
               {sortBar}
               {filterBar}
@@ -104,7 +112,9 @@ var app = app || {};
 
           <section className="videos">
             <div className="row">
-              {videoItems}
+                  <ReactCSSTransitionGroup transitionName="videoItem">
+                    {videoItems}
+                  </ReactCSSTransitionGroup>
             </div>
           </section>
         </div>
@@ -114,6 +124,3 @@ var app = app || {};
 
 })();
 
- // <ReactCSSTransitionGroup transitionName="videoItem">
- //              {videoItems}
- //              </ReactCSSTransitionGroup>

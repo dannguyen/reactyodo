@@ -13,15 +13,22 @@ var app = app || {};
     //   return { itemCount: 0 };
     // },
 
-
-
     render: function () {
-      return (
-          <label className="checkbox-inline">
-              <input className="category" type="checkbox" name={this.props.name} onChange={this.props.onChange} checked={this.props.isActive} />
-              {this.props.name} ({this.props.itemCount})
-          </label>
+      return(
+        <option value={this.props.name}>
+            {this.props.name}
+        </option>
+
       );
+
+      // return (
+      //     <div className="fancy-checkbox">
+      //       <label className="checkbox-inline">
+      //           <input className="category" type="checkbox" name={this.props.name} onChange={this.props.onChange} checked={this.props.isActive} />
+      //           {this.props.name}
+      //       </label>
+      //     </div>
+      // );
     }
   });
 

@@ -1,4 +1,14 @@
 
+.fancy-checkbox{
+  background: #258294;
+  color: white;
+  font-weight: bold;
+  padding: 6px;
+  display: inline-block;
+  width: 200px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
 
 .videoItem{
   height: 280px;
@@ -17,7 +27,7 @@
 
 .videoItem-enter {
   opacity: 0.01;
-  transition: opacity .5s ease-in;
+  transition: opacity .3s ease-out;
 }
 
 .videoItem-enter.videoItem-enter-active {
@@ -26,9 +36,20 @@
 
 .videoItem-leave {
   opacity: 1;
-  transition: opacity .5s ease-in;
+  transition: opacity .2s ease-out;
 }
 
 .videoItem-leave.videoItem-leave-active {
   opacity: 0.01;
+}
+
+
+/* video viewer */
+
+.videoViewer{
+  margin-bottom: 2.0em;
+}
+
+.videoViewer.empty{
+  display: none;
 }

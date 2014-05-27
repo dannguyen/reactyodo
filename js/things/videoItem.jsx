@@ -26,8 +26,16 @@ var app = app || {};
               <h5>{this.props.title}</h5>
 
             </a>
-            <div className="view_count">Views: {this.props.view_count}</div>
-            <div className="published_at">{this.props.published_at}</div>
+            <div class="meta">
+              <span className="view_count"> {numeral(this.props.view_count).format('0,0')} views</span>
+              &nbsp;
+              <span className="published_at">{ moment(this.props.pub_seconds + "", "X").format('l') }</span>
+            </div>
+            <div className="approvail">
+              {numeral(this.props.likes).format('0,0')} likes &nbsp; {numeral(this.props.dislikes).format('0,0')} dislikes
+
+            </div>
+
           </div>
         </div>
       );
@@ -35,3 +43,4 @@ var app = app || {};
   });
 
 })();
+

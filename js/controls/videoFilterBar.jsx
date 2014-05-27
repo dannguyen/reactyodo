@@ -12,22 +12,23 @@ var app = app || {};
   app.VideoFilterBar = React.createClass({
       render: function() {
         var handleFilterChange = this.props.onFilterChange;
-        var filteredCats = this.props.filteredCategories;
-        var categoryMenu = _.collect(this.props.categories, function(catcount, catname){
-          var isChecked = filteredCats[catname] === true;
+        var selectedCat = this.props.categoryType;
+        var categoryOpts = _.collect(this.props.categories, function(catcount, catname){
+//          var isChecked = filteredCats[catname] === true;
 
           return(
             <FilterCategoryItem
-              key={catname}
+              key={"catfilter" + catname}
               name={catname}
-              isActive={isChecked}
-              itemCount={catcount}
-              onChange={handleFilterChange}
-            >
-            </FilterCategoryItem>
+            />
           );
         });
-        return(<div class="form-group">{categoryMenu}</div>);
+
+        return(<div class="form-group">
+          <select name="category" defaultValue={selectedCat} onChange={this.props.onFilterChange}>
+            {categoryOpts}
+          </select>
+        </div>);
       }
   });
 

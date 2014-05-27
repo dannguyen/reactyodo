@@ -22,12 +22,12 @@ var app = app || {};
                 <img src="//placehold.it/950x550" />
               </div>
               <div className="videoInfo">
-                <h5>{video.title} {video.t_id}</h5>
+                <h2>{video.title} {video.t_id}</h2>
               </div>
           </div>
         );
       }else{
-        return( <div className="videoViewer">TODO: What happens when video is deep-linked and no collection is loaded?</div>);
+        return( <div className="videoViewer empty"></div>);
       }
 
     }
