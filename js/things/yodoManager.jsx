@@ -10,13 +10,13 @@ var app = app || {};
   'use strict';
 
 
-  var VideoPlayer = app.VideoPlayer;
-  var VideoFilterBar = app.VideoFilterBar;
-  var VideoSortBar = app.VideoSortBar;
-  var VideoPager = app.VideoPager;
+  var YodoPlayer = app.YodoPlayer;
+  var YodoFilterBar = app.YodoFilterBar;
+  var YodoSortBar = app.YodoSortBar;
+  var YodoPager = app.YodoPager;
 
 
-  app.VideoManager = React.createClass({
+  app.YodoManager = React.createClass({
     getInitialState: function(){
       return{
         categoryType: this.props.activeCategory,
@@ -45,19 +45,19 @@ var app = app || {};
       var video_coll = this.props.videoCollection;
 
 
-      // setup the VideoPlayer if we're viewing a video
+      // setup the YodoPlayer if we're viewing a video
       var activeVideo = video_coll.findVideoById(this.props.activeVideoId);
-      // is a video active? set the main VideoPlayer
-      var el_VideoPlayer = (
-        <VideoPlayer video={activeVideo} />
+      // is a video active? set the main YodoPlayer
+      var el_YodoPlayer = (
+        <YodoPlayer video={activeVideo} />
       );
 
 
       var categories = video_coll.categoriesCount;
       var el_FilterBar = (
-          <VideoFilterBar categories={categories} onFilterChange={this.handleFilterChange} categoryType={this.state.categoryType} />
+          <YodoFilterBar categories={categories} onFilterChange={this.handleFilterChange} categoryType={this.state.categoryType} />
         ), el_SortBar = (
-          <VideoSortBar onChange={this.handleSortChange} sortType={this.state.sortType} />
+          <YodoSortBar onChange={this.handleSortChange} sortType={this.state.sortType} />
       );
 
       // filter and get videos
@@ -68,13 +68,13 @@ var app = app || {};
                                           }
                                         );
 
-      var el_VideoPager = (<VideoPager videoSelection={selected_videos} />);
+      var el_YodoPager = (<YodoPager videoSelection={selected_videos} />);
 
 
       return (
-        <div className="videoManager">
+        <div className="yodoManager">
           <section>
-            {el_VideoPlayer}
+            {el_YodoPlayer}
           </section>
 
           <section>
@@ -89,7 +89,7 @@ var app = app || {};
 
 
           <section>
-            {el_VideoPager}
+            {el_YodoPager}
           </section>
         </div>
       );

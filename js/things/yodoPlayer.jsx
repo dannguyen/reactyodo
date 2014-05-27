@@ -8,7 +8,7 @@
 var app = app || {};
 (function(){
   'use strict';
-  app.VideoPlayer = React.createClass({
+  app.YodoPlayer = React.createClass({
     getInitialState: function () {
       return { isPlaying: false };
     },
@@ -17,10 +17,10 @@ var app = app || {};
       var video = this.props.video;
       if(video){
         return (
-          <div className="videoPlayer">
+          <div className="yodoPlayer">
               <a name={"/video/" + video.t_id} id={"/video/" + video.t_id} />
               <div className="videoPlayback">
-                <iframe width="1100" height="600" src={"//www.youtube.com/embed/" + video.t_id} frameborder="0" allowfullscreen="true" />
+                <iframe width="1100" height="600" src={"//www.youtube.com/embed/" + video.t_id} frameBorder="0" allowFullScreen="true" />
 
               </div>
               <div className="videoInfo" display="none">
@@ -30,7 +30,7 @@ var app = app || {};
           </div>
         );
       }else{
-        return( <div className="videoPlayer empty"></div>);
+        return( <div className="yodoPlayer empty"></div>);
       }
 
     }

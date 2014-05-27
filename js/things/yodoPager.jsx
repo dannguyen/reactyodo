@@ -12,7 +12,7 @@ var app = app || {};
   var VideoItem = app.VideoItem;
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-  app.VideoPager = React.createClass({
+  app.YodoPager = React.createClass({
 
     render: function(){
       var videos_pouroverview = this.props.videoSelection;

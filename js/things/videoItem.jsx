@@ -28,8 +28,8 @@ var app = app || {};
               <h5 style={{display: "none"}}>{video.title}</h5>
 
             </a>
-            <div class="meta" style={{display: "none"}}>
-              <div class="metrics">
+            <div className="meta" style={{display: "none"}}>
+              <div className="metrics">
                 <span className="view_count"> {numeral(video.view_count).format('0,0')} views</span>
                 &nbsp;
                 <span className="published_at">{ moment(video.pub_seconds + "", "X").format('l') }</span>

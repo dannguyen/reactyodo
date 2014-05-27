@@ -14,7 +14,7 @@ var app = app || {};
   app.DEFAULT_DATA_URL = "/data/videos-small.json"; // = "/data/videos-small.json";
   app.BIG_DATA_URL = "/data/videos.json";
 
-  var VideoManager = app.VideoManager;
+  var YodoManager = app.YodoManager;
   var VideoCollection = app.VideoCollection;
 
   var YodoApp = React.createClass({
@@ -67,7 +67,7 @@ var app = app || {};
       return(
         <div className='yodo_app'>
           <h1><a href="/">YodoApp</a></h1>
-          <VideoManager videoCollection={this.state.videoCollection}
+          <YodoManager videoCollection={this.state.videoCollection}
               activeCategory={this.state.activeCategory}
               activeVideoId={this.state.activeVideoId} />
         </div>

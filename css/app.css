@@ -59,10 +59,10 @@
 
 /* video viewer */
 
-.videoPlayer{
+.yodoPlayer{
   margin-bottom: 2.0em;
 }
 
-.videoPlayer.empty{
+.yodoPlayer.empty{
   display: none;
 }

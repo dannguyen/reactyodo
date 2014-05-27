@@ -8,7 +8,7 @@
 var app = app || {};
 (function(){
   'use strict';
-  app.VideoSortBar = React.createClass({
+  app.YodoSortBar = React.createClass({
       getDefaultProps: function() {
         return {
           sortType: "Most Viewed"
@@ -19,7 +19,7 @@ var app = app || {};
 
         var sortMenu = (
           <RadioGroup name="sortOps" value={this.props.sortType}  onChange={this.props.onChange}>
-            <div class="form-group">
+            <div className="form-group">
               <label className="radio-inline">
                   <input name="sortOps" type="radio" value="Most Viewed" onChange={this.props.onChange} />
                   Most Viewed

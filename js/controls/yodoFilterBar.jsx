@@ -9,7 +9,7 @@ var app = app || {};
 (function(){
   'use strict';
   var FilterCategoryItem = app.FilterCategoryItem;
-  app.VideoFilterBar = React.createClass({
+  app.YodoFilterBar = React.createClass({
       render: function() {
         var handleFilterChange = this.props.onFilterChange;
         var selectedCat = this.props.categoryType;
@@ -26,7 +26,7 @@ var app = app || {};
         });
 
 
-        return(<div class="form-group">
+        return(<div className="form-group">
           <select name="category" defaultValue={selectedCat} onChange={this.props.onFilterChange}>
             <FilterCategoryItem
               key={"catfilter-blank"}
