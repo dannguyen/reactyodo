@@ -1,3 +1,10 @@
+h1, h2, h3, h4, h5, h6{
+  margin-top: 0;
+}
+
+
+/**********************************/
+
 .imgwrap img{
   width: 100%;
 }
@@ -27,10 +34,18 @@
   background: black;
 }
 
+.videoItem .title{
+  color: #ddd;
+}
+
 .videoItem .thumbnail{
   border: thin solid #999;
   width: 100%;
   height: 150px;
+}
+
+.videoItem:hover{
+  border: thin solid #fff;
 }
 
 .videoItem .thumbnail img{
@@ -63,6 +78,18 @@
   margin-bottom: 2.0em;
 }
 
+
+.yodoPlayer .videoInfo{
+  margin-top: 1.0em;
+}
+
 .yodoPlayer.empty{
   display: none;
+}
+
+
+.imgTK{
+  width: 100%;
+  height: 240px;
+  background: #335;
 }

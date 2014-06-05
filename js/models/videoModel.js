@@ -20,6 +20,8 @@ var app = app || {};
     this.published_at = obj.published_at;
     this.pub_seconds = obj.pub_seconds;
     this.pub_year = obj.pub_year;
+    this.published_date = moment(this.pub_seconds + "", "X").format('l')
+
     this.likes = obj.likes;
     this.dislikes = obj.dislikes;
 

@@ -20,7 +20,9 @@ var app = app || {};
     getInitialState: function(){
       return{
         categoryType: this.props.activeCategory,
-        sortType: 'Most Viewed'
+        sortType: 'Most Viewed',
+        pageNumber: 1,
+        pageSize: 100
       };
     },
 
@@ -62,13 +64,22 @@ var app = app || {};
 
       // filter and get videos
 
-      var selected_videos = video_coll.getView(
-                                          { filters: { category:  [this.state.categoryType] },
+      var vid_page = video_coll.getPage(
+                                          {
+                                            pageNumber: this.state.pageNumber,
+                                            pageSize: this.state.pageSize,
+                                            filters: { category:  [this.state.categoryType] },
                                             sortType: this.state.sortType
                                           }
                                         );
 
-      var el_YodoPager = (<YodoPager videoSelection={selected_videos} />);
+      var el_YodoPager = (<YodoPager
+          videos={vid_page.getCurrentItems()}
+          totalVideoCount={video_coll.totalVideoCount()}
+          filteredVideoCount={video_coll.filteredVideoCount()}
+          pageNumber={this.state.pageNumber}
+          pageSize={this.state.pageSize}
+      />);
 
 
       return (
@@ -79,7 +90,7 @@ var app = app || {};
 
           <section>
             <div className="summary">
-                {video_coll.totalVideoCount()} videos, {video_coll.selectedVideoCount()} videos visible
+                {video_coll.totalVideoCount()} videos, {video_coll.filteredVideoCount()} videos visible
             </div>
             <form role="form">
               {el_SortBar}

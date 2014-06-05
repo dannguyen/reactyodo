@@ -15,7 +15,7 @@ var app = app || {};
 
   var NewestVideoSort = PourOver.Sort.extend({
     fn: function(x,y){
-      var a = x.published_at, b = y.published_at;
+      var a = x.pub_seconds, b = y.pub_seconds;
         if (b < a){
           return -1;
         } else if (b > a){
@@ -49,7 +49,8 @@ var app = app || {};
 
     var video_array_temp = _.values(this.videoHash);
 
-    this.resultsLength = video_array_temp.length; // a temp workaround
+    this.__resultsLength = video_array_temp.length; // a temp workaround
+    this.__filtered_video_count = this.__resultsLength;
     this.pouroverCollection = new PourOver.Collection( video_array_temp );
     this.currentView = undefined;
     this.categoriesCount = this.extractCategories(video_array_temp);
@@ -67,15 +68,22 @@ var app = app || {};
 
 
 
+  VideoCollection.prototype.getPage = function(opts){
+    var options = opts || {}
 
-  VideoCollection.prototype.getView = function(opts){
-    var pView = new PourOver.View("default_view", this.pouroverCollection, { page_size: 100 });
-    if(_.isUndefined(opts)){
-      pView = this.filterVideosView(pView, {})
-    }else{
-      pView = this.filterVideosView(pView, opts.filters)
-      pView = this.sortVideosView(pView, opts.sortType)
-    }
+    var pView = new PourOver.View( "default_view",
+          this.pouroverCollection,
+          { page_size: options.pageSize || 42 });
+
+    var coll = this.filterVideosView(this.pouroverCollection, options.filters);
+
+
+
+    pView = this.sortVideosView(pView, options.sortType)
+
+   // opts.page_number expected to be 1 or greater
+   var _page_offset = options.pageNumber > 1 ? (options.pageNumber - 1) : 0
+   pView.page(_page_offset);
    this.currentView = pView;
 
    return this.currentView;
@@ -83,35 +91,48 @@ var app = app || {};
 
 
 
-  // filter_opts is a Hash thgat looks like {categories: ['Airlines', 'Hotels'], dates: [tkETC, 2012] }
-  VideoCollection.prototype.filterVideosView = function(pView, filter_opts){
-    var coll = pView.collection;
+  // filter_opts is a Hash that looks like {categories: ['Airlines', 'Hotels'], dates: [tkETC, 2012] }
+  // returns the collection
+  // also has side-effect of altering __filtered_video_count, because I don't know any better
+  VideoCollection.prototype.filterVideosView = function(coll, filter_opts){
+
+    var temp_view = new PourOver.View( "some_filtered_view",
+             coll );
 
     if( _.isUndefined(filter_opts)      === true ||      // filteropts is undefined
         _.isEmpty(filter_opts)          === true ||      // filteropts is empty
         _.every(_.values(filter_opts), function(a){ return _.isEmpty(a); })  === true         // every array of filteropts is empty
       ){
       // return all of the items
-    console.log('ALL pourover')
+      console.log('ALL pourover')
       // i.e. leave pView and coll alone
     }else{
       // return some items
       // modify coll with stateful query filters
-    console.log('filtered pourover')
+       console.log('filtered pourover')
 
       _.each(filter_opts, function(filtersHash, filterType){
         var active_filters = [];
         _.each(filtersHash, function(fName){
           if(fName && fName !== ''){ // a blank value indicates "all"
             active_filters.push(fName);
+            console.log("FILTER -- " + filterType + ' :  ' + fName)
           }
         })
         // now filter
         coll.filters[filterType].query( active_filters );
-      })
+      });
+
+      // hack -- how else to get filtered count before pagination?
+      // hope it gets garbaged collected
+
+      this.__filtered_video_count = temp_view.getCurrentItems().length
+      console.log("filter vid count: " + this.__filtered_video_count );
+
+
     }
 
-    return pView;
+    return coll;
   };
 
 
@@ -131,17 +152,12 @@ var app = app || {};
   };
 
 
-  VideoCollection.prototype.selectedVideoCount =  function(){
-    if(_.isUndefined(this.currentView)){
-      return 0;
-    }else{
-      return this.currentView.getCurrentItems().length;
-    }
-
+  VideoCollection.prototype.filteredVideoCount =  function(){
+    return this.__filtered_video_count;
   };
 
   VideoCollection.prototype.totalVideoCount =  function(){
-    return this.resultsLength; // TK fix later
+    return this.__resultsLength; // TK fix later
   };
 
 

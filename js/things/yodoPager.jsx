@@ -15,9 +15,8 @@ var app = app || {};
   app.YodoPager = React.createClass({
 
     render: function(){
-      var videos_pouroverview = this.props.videoSelection;
-      var videos = videos_pouroverview.getCurrentItems(); // TK: some kind of intermediary step
 
+      var videos = this.props.videos;
       var videoItems = videos.map(function(video) {
         return(
           <VideoItem
@@ -30,11 +29,20 @@ var app = app || {};
       }, this);
 
       return(
-        <div className="row no-gutter">
-            <ReactCSSTransitionGroup transitionName="videoItem">
-              {videoItems}
-            </ReactCSSTransitionGroup>
-        </div>
+        <div className="yodoPager">
+          <div className="videoPageStatus">
+            <ul className="list-unstyled list">
+              <li> <strong>{this.props.filteredVideoCount}</strong> filtered out of  {this.props.totalVideoCount} total</li>
+              <li> {videos.length} videos per page </li>
+              <li> {this.props.pageNumber} / x(TODO calc) total pages </li>
+            </ul>
+          </div>
+          <div className="row no-gutter">
+              <ReactCSSTransitionGroup transitionName="videoItem">
+                {videoItems}
+              </ReactCSSTransitionGroup>
+          </div>
+         </div>
       );
     }
   });

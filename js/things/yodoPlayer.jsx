@@ -24,8 +24,31 @@ var app = app || {};
 
               </div>
               <div className="videoInfo" display="none">
-                <h3>{video.title} </h3>
-                <h5>by  <a href={"//iq.skift.com/brands/" + video.brand_slug}>{video.brand_name}</a></h5>
+                <div className="row">
+                  <div className="col-sm-9">
+                    <h3 className="title">{video.title}</h3>
+                    <h5 className="author">by  <a href={"//iq.skift.com/brands/" + video.brand_slug}>{video.brand_name}</a></h5>
+
+                    <span className="published_date">{ video.published_date }</span>
+
+                  </div>
+                  <div className="col-sm-3">
+                    <div className="meta">
+
+                      <div className="view_count"> {numeral(video.view_count).format('0,0')} views</div>
+
+                      <div className="approval">
+                        <div className="likes">
+                          {numeral(video.likes).format('0,0')} likes
+                        </div>
+                        <div className="dislikes">
+                          {numeral(video.dislikes).format('0,0')} dislikes
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
               </div>
           </div>
         );
