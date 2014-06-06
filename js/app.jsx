@@ -23,7 +23,9 @@ var app = app || {};
         videoCollection: new VideoCollection(),
         data_url: app.DEFAULT_DATA_URL,
         activeVideoId: undefined,
-        activeCategory: ''
+        activeCategory: '',
+
+        categories: []
       }
     },
 
@@ -32,9 +34,8 @@ var app = app || {};
 
       $.get(d_url, function(results){
         console.log("results fetched: " + results.length);
-        var coll = new VideoCollection(results);
 
-        this.setState({videoCollection: coll });
+        this.initVideoCollection(results);
 
       }.bind(this));
     },
@@ -62,8 +63,19 @@ var app = app || {};
     },
 
 
-    render: function(){
+    // sets up resultCollection
+    // sets up categories
+    initVideoCollection: function(results){
+        var coll = new VideoCollection(results);
 
+//        var facets = coll.pluckTODOfacets
+
+        this.setState({videoCollection: coll });
+
+    },
+
+
+    render: function(){
       return(
         <div className='yodo_app'>
           <h1><a href="/">YodoApp</a></h1>
@@ -73,9 +85,6 @@ var app = app || {};
         </div>
       );
     }
-
-
-
 
   }); // YodoApp
 
